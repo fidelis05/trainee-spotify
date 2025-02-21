@@ -10,7 +10,7 @@ const statusCodes = require('../../../../constants/statusCodes.js');
 
 router.post('/login', notLoggedIn, loginMiddleware);
 
-router.post('/verify-password', notLoggedIn, passwordVerifyMiddleware);
+router.post('/verify-password', passwordVerifyMiddleware);
 
 router.post('/logout',
   verifyJWT,
