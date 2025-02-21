@@ -57,7 +57,7 @@ async function loginMiddleware(req, res, next) {
 
 async function passwordVerifyMiddleware(req, res, next) {
   try {
-    const user = await User.findOne({ where: { email: req.body.email } });
+    const user = await User.findOne({ where: { id: req.body.id } });
     if (!user) {
       return res.status(statusCodes.unauthorized).json({ message: 'E-mail e/ou senha incorretos!' });
     }
