@@ -18,8 +18,10 @@ function generateJWT(user, res) {
 
   res.cookie('jwt', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== 'development', // Só em produção
-    sameSite: 'None', // Permite cookies entre domínios diferentes
+    secure: process.env.NODE_ENV !== 'development', // Only in production
+    sameSite: 'Lax', // Allow cookies on same-site requests, even across different paths
+    domain: 'trainee-spotify-test.vercel.app', // Your domain
+    path: '/', // Ensure the cookie is accessible across all paths
   });
 }
 
