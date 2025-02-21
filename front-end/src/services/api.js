@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "https://trainee-spotify-test.vercel.app/api",
+    baseURL: `${window.location.origin}/api`, // Automatically sets the current domain
     withCredentials: true,
 });
 

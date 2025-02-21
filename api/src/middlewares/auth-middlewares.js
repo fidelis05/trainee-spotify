@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const User = require('../domains/users/models/User.js');
-const PermissionError = require('../../errors/PermissionError.js');
-const statusCodes = require('../../constants/statusCodes.js');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const User = require("../domains/users/models/User.js");
+const PermissionError = require("../../errors/PermissionError.js");
+const statusCodes = require("../../constants/statusCodes.js");
 
 function generateJWT(user, res) {
   const body = {
@@ -16,12 +16,17 @@ function generateJWT(user, res) {
     expiresIn: process.env.JWT_EXPIRATION,
   });
 
-  res.cookie('jwt', token, {
+  // Get domain dynamically
+  const domain = process.env.VERCEL_URL 
+    ? `.${process.env.VERCEL_URL.replace(/^https?:\/\//, '')}`
+    : undefined;
+
+  res.cookie("jwt", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== 'development', // Only in production
-    sameSite: 'Lax', // Allow cookies on same-site requests, even across different paths
-    domain: 'trainee-spotify-test.vercel.app', // Your domain
-    path: '/', // Ensure the cookie is accessible across all paths
+    secure: process.env.NODE_ENV !== "development", // Only in production
+    sameSite: "Lax", 
+    domain, // Dynamic domain
+    path: "/",
   });
 }
 
@@ -29,7 +34,7 @@ function cookieExtractor(req) {
   let token = null;
 
   if (req && req.cookies) {
-    token = req.cookies['jwt'];
+    token = req.cookies["jwt"];
   }
 
   return token;
@@ -37,13 +42,16 @@ function cookieExtractor(req) {
 
 async function loginMiddleware(req, res, next) {
   try {
-    const user = await User.findOne({where: {email: req.body.email}});
+    const user = await User.findOne({ where: { email: req.body.email } });
     if (!user) {
-      throw new PermissionError('E-mail e/ou senha incorretos!');
+      throw new PermissionError("E-mail e/ou senha incorretos!");
     } else {
-      const matchingPassword = await bcrypt.compare(req.body.password, user.password);
+      const matchingPassword = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
       if (!matchingPassword) {
-        throw new PermissionError('E-mail e/ou senha incorretos!');
+        throw new PermissionError("E-mail e/ou senha incorretos!");
       }
     }
 
@@ -59,20 +67,26 @@ async function passwordVerifyMiddleware(req, res, next) {
   try {
     const user = await User.findOne({ where: { id: req.body.id } });
     if (!user) {
-      return res.status(statusCodes.unauthorized).json({ message: 'E-mail e/ou senha incorretos!' });
+      return res
+        .status(statusCodes.unauthorized)
+        .json({ message: "E-mail e/ou senha incorretos!" });
     }
 
-    const matchingPassword = await bcrypt.compare(req.body.password, user.password);
+    const matchingPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
     if (!matchingPassword) {
-      return res.status(statusCodes.unauthorized).json({ message: 'E-mail e/ou senha incorretos!' });
+      return res
+        .status(statusCodes.unauthorized)
+        .json({ message: "E-mail e/ou senha incorretos!" });
     }
 
-    res.status(statusCodes.success).json({ message: 'Senha correta!' });
+    res.status(statusCodes.success).json({ message: "Senha correta!" });
   } catch (error) {
     next(error);
   }
 }
-
 
 function notLoggedIn(req, res, next) {
   try {
@@ -81,7 +95,7 @@ function notLoggedIn(req, res, next) {
     if (token) {
       const decoded = jwt.verify(token, process.env.SECRET_KEY);
       if (decoded) {
-        throw new PermissionError('Você já está logado no sistema!');
+        throw new PermissionError("Você já está logado no sistema!");
       }
     }
     next();
@@ -100,7 +114,8 @@ function verifyJWT(req, res, next) {
 
     if (!req.user) {
       throw new PermissionError(
-        'Você precisa estar logado para realizar essa ação!');
+        "Você precisa estar logado para realizar essa ação!"
+      );
     }
     next();
   } catch (error) {
@@ -111,11 +126,12 @@ function verifyJWT(req, res, next) {
 const checkRole = (roles) => {
   return (req, res, next) => {
     try {
-      ! roles.includes(req.user.role) ? res.json('Você não possui permissão para realizar essa ação') : next();
-    } catch(error){
+      !roles.includes(req.user.role)
+        ? res.json("Você não possui permissão para realizar essa ação")
+        : next();
+    } catch (error) {
       next(error);
     }
-
   };
 };
 
