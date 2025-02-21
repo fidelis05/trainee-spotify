@@ -9,7 +9,7 @@
       }
     },
     {
-      "src": "api/server.js",
+      "src": "api/index.js",
       "use": "@vercel/node"
     }
   ],
@@ -21,6 +21,12 @@
     {
       "src": "/(.*)",
       "dest": "/front-end/$1"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/front-end/dist/index.html"
     }
   ]
 }
