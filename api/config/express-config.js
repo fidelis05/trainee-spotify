@@ -13,7 +13,7 @@ app.use(
       "http://127.0.0.1:5173:3030",
       "http://127.0.0.1:5173",
       "http://localhost:3000",
-      "https://your-app.vercel.app", // Add your Vercel frontend URL here
+      "https://trainee-spotify.vercel.app",
     ],
     credentials: true,
   })
