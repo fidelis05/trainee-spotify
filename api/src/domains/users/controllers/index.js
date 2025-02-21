@@ -16,9 +16,9 @@ router.post("/verify-password", passwordVerifyMiddleware);
 
 router.post("/logout", verifyJWT, async (req, res, next) => {
   try {
-    const domain = process.env.VERCEL_URL
-      ? `.${process.env.VERCEL_URL.replace(/^https?:\/\//, "")}`
-      : undefined;
+    const domain = req.headers.origin
+      ? new URL(req.headers.origin).hostname // Pega o domínio real do usuário
+      : undefined; // Se não existir, mantém indefinido para funcionar localmente
 
     res.clearCookie("jwt", { domain, path: "/" });
     res.status(204).json({ message: "Logged out" });

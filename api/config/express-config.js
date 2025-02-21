@@ -4,20 +4,29 @@ const express = require("express");
 const app = express();
 
 // CORS configuration
-const cors = require("cors"); // Certifique-se de importar o CORS
-
-const allowedOrigins = [
-  "http://localhost:3030",
-  "http://localhost:5173",
-  "http://127.0.0.1:3030",
-  "http://127.0.0.1:5173",
-  "http://localhost:3000",
-  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
-].filter(Boolean); // Remove valores nulos
+const cors = require("cors");
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // Obtém o domínio real do usuário
+      const domain = origin ? new URL(origin).hostname : null;
+
+      const allowedOrigins = [
+        "http://localhost:3030",
+        "http://localhost:5173",
+        "http://127.0.0.1:3030",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+      ];
+
+      // Se o domínio atual for Vercel ou estiver na lista de permitidos, aceita
+      if (!origin || allowedOrigins.includes(origin) || domain.endsWith(".vercel.app")) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );

@@ -4,7 +4,7 @@ const User = require("../domains/users/models/User.js");
 const PermissionError = require("../../errors/PermissionError.js");
 const statusCodes = require("../../constants/statusCodes.js");
 
-function generateJWT(user, res) {
+function generateJWT(user, req, res) {
   const body = {
     id: user.id,
     name: user.name,
@@ -16,16 +16,15 @@ function generateJWT(user, res) {
     expiresIn: process.env.JWT_EXPIRATION,
   });
 
-  // Get domain dynamically
-  const domain = process.env.VERCEL_URL 
-    ? `.${process.env.VERCEL_URL.replace(/^https?:\/\//, '')}`
+  const domain = req.headers.origin
+    ? new URL(req.headers.origin).hostname
     : undefined;
 
   res.cookie("jwt", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== "development", // Only in production
-    sameSite: "Lax", 
-    domain, // Dynamic domain
+    secure: process.env.NODE_ENV !== "development",
+    sameSite: "Lax",
+    domain,
     path: "/",
   });
 }
