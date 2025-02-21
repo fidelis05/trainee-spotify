@@ -55,6 +55,25 @@ async function loginMiddleware(req, res, next) {
   }
 }
 
+async function passwordVerifyMiddleware(req, res, next) {
+  try {
+    const user = await User.findOne({ where: { email: req.body.email } });
+    if (!user) {
+      return res.status(statusCodes.unauthorized).json({ message: 'E-mail e/ou senha incorretos!' });
+    }
+
+    const matchingPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!matchingPassword) {
+      return res.status(statusCodes.unauthorized).json({ message: 'E-mail e/ou senha incorretos!' });
+    }
+
+    res.status(statusCodes.success).json({ message: 'Senha correta!' });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 function notLoggedIn(req, res, next) {
   try {
     const token = cookieExtractor(req);
@@ -102,6 +121,7 @@ const checkRole = (roles) => {
 
 module.exports = {
   loginMiddleware,
+  passwordVerifyMiddleware,
   notLoggedIn,
   verifyJWT,
   checkRole,

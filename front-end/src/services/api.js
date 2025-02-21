@@ -147,29 +147,22 @@ export const updateUserEmail = async (id, email) => {
 }
 
 export const updateUserPassword = async (id, currentPassword, newPassword) => {
-    if (localStorage.getItem('password') === currentPassword) {
-        try {
-            const response = await api.put(`/users/${id}`, {
-                newPassword
-            })
+    try {
+        const verifyResponse = await api.post('/verify-password', { password: currentPassword });
+        
+        if (verifyResponse.data.success) {
+            const response = await api.put(`/users/${id}`, { newPassword });
             localStorage.setItem('password', newPassword);
-            return {
-                success: true
-            };
-        } catch (error) {
-            console.error("Error updating user password:", error)
-            return {
-                success: false,
-                error
-            };
+            return { success: true };
+        } else {
+            return { success: false, error: 'Senha atual incorreta.' };
         }
-    } else {
-        return {
-            success: false,
-            error: 'Senha atual incorreta.'
-        }
+    } catch (error) {
+        console.error("Error updating user password:", error);
+        return { success: false, error };
     }
-}
+};
+
 
 // Criação de artistas no banco de dados
 export const setupInitialArtists = async () => {

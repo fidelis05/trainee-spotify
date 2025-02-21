@@ -3,11 +3,14 @@ const UserService = require('../services/UserService');
 const {loginMiddleware,
   verifyJWT,
   checkRole,
-  notLoggedIn} = require('../../../middlewares/auth-middlewares.js');
+  notLoggedIn,
+  passwordVerifyMiddleware} = require('../../../middlewares/auth-middlewares.js');
 const userRoles = require('../../users/constants/userRoles.js');
 const statusCodes = require('../../../../constants/statusCodes.js');
 
 router.post('/login', notLoggedIn, loginMiddleware);
+
+router.post('/verify-password', notLoggedIn, passwordVerifyMiddleware);
 
 router.post('/logout',
   verifyJWT,
