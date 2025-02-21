@@ -19,8 +19,12 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/((?!api|assets).*)",
-      "destination": "/index.html"
+      "source": "/(?!api.*)",
+      "destination": "/front-end/index.html"
+    },
+    {
+      "source": "/(?!assets).*)",
+      "destination": "/front-end/index.html"
     }
   ]
 }
