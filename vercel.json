@@ -19,8 +19,8 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/((?!api).*)",
-      "destination": "/front-end"
+      "source": "/(?!.*\\..*$).*",
+      "destination": "/index.html"
     }
   ]
 }
