@@ -21,14 +21,14 @@
     },
     {
       "src": "/assets/(.*)",
-      "dest": "/front-end/dist/assets/$1"
+      "dest": "/front-end/assets/$1"
     },
     {
       "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "/front-end/dist/index.html"
+      "dest": "/front-end/index.html"
     }
   ]
 }
