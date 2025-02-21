@@ -13,14 +13,8 @@ router.post('/logout',
   verifyJWT,
   async (req, res, next) => {
     try {
-      res.clearCookie('jwt', {
-        domain: 'trainee-spotify-test.vercel.app', 
-        path: '/', 
-        httpOnly: true,
-        secure: process.env.NODE_ENV !== 'development',
-        sameSite: 'Lax',
-      });
-      res.status(statusCodes.noContent).end();
+      res.clearCookie('jwt', { domain: 'trainee-spotify-test.vercel.app', path: '/' });
+      res.status(statusCodes.noContent).json({ message: 'Logged out' });
     } catch (error) {
       next(error);
     }
