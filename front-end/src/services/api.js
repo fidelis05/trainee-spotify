@@ -101,10 +101,14 @@ export const loginUser = async (email, password) => {
     }
 };
 
-export const logoutUser = () => {
-    api.post("/users/logout");
-    localStorage.setItem('isLoggedIn', 'false');
-    window.location.href = '/login';
+export const logoutUser = async () => {
+    try {
+        await api.post("/users/logout");
+        localStorage.setItem('isLoggedIn', 'false');
+        window.location.href = '/login';
+    } catch (error) {
+        console.error("Erro ao fazer logout:", error);
+    }
 };
 
 export const checkLoginStatus = () => {
