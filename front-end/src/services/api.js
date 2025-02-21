@@ -152,7 +152,6 @@ export const updateUserPassword = async (id, currentPassword, newPassword) => {
         
         if (verifyResponse.data.success) {
             const response = await api.put(`/users/${id}`, { newPassword });
-            localStorage.setItem('password', newPassword);
             return { success: true };
         } else {
             return { success: false, error: 'Senha atual incorreta.' };
