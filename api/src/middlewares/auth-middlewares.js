@@ -12,12 +12,14 @@ function generateJWT(user, res) {
     role: user.role,
   };
 
-  const token = jwt.sign({ user: body }, process.env.SECRET_KEY,
-    { expiresIn: process.env.JWT_EXPIRATION });
+  const token = jwt.sign({ user: body }, process.env.SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRATION,
+  });
 
   res.cookie('jwt', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== 'development',
+    secure: process.env.NODE_ENV !== 'development', // Só em produção
+    sameSite: 'None', // Permite cookies entre domínios diferentes
   });
 }
 
