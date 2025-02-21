@@ -7,7 +7,7 @@ export const api = axios.create({
 
 export const linkSongToUser = async (songId) => {
     try {
-        const response = await api.post(`/users-songs/${songId}`, { withCredentials: true });
+        const response = await api.post(`/users-songs/${songId}`);
         return {
             success: true
         };
@@ -22,7 +22,7 @@ export const linkSongToUser = async (songId) => {
 }
 export const getAllArtists = async () => {
     try {
-        const response = await api.get("/artists", { withCredentials: true });
+        const response = await api.get("/artists");
         return response.data;
     } catch (error) {
         console.error("Error fetching artists:", error);
@@ -31,7 +31,7 @@ export const getAllArtists = async () => {
 };
 export const getSongsUserLiked = async (userId) => {
     try {
-        const response = await api.get(`/users-songs/users/${userId}`, { withCredentials: true });
+        const response = await api.get(`/users-songs/users/${userId}`);
         return response.data;
     }
     catch (error) {
@@ -41,7 +41,7 @@ export const getSongsUserLiked = async (userId) => {
 
 export const getArtistById = async (artistId) => {
     try {
-        const response = await api.get(`/artists/${artistId}`, { withCredentials: true });
+        const response = await api.get(`/artists/${artistId}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching artist by Id", error);
@@ -51,7 +51,7 @@ export const getArtistById = async (artistId) => {
 
 export const getAllUsers = async () => {
     try {
-        const response = await api.get("/users", { withCredentials: true });
+        const response = await api.get("/users");
         return response.data;
     } catch (error) {
         console.error("Error fetching users:", error);
@@ -66,7 +66,7 @@ export const createUser = async (name, email, password, role) => {
             email,
             password,
             role
-        }, { withCredentials: true });
+        });
         console.log("User created:", response);
         return {
             success: true
@@ -85,7 +85,7 @@ export const loginUser = async (email, password) => {
         const response = await api.post("/users/login", {
             email,
             password
-        }, { withCredentials: true });
+        });
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('password', password);
         console.log("Login successful:", response);
@@ -102,7 +102,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const logoutUser = () => {
-    api.post("/users/logout", { withCredentials: true });
+    api.post("/users/logout");
     localStorage.setItem('isLoggedIn', 'false');
     window.location.href = '/login';
 };
@@ -113,7 +113,7 @@ export const checkLoginStatus = () => {
 
 export const getUserInfo = async () => {
     try {
-        const response = await api.get("/users/user", { withCredentials: true });
+        const response = await api.get("/users/user");
         return response.data;
     } catch (error) {
         console.error("Error getting user info:", error);
@@ -129,7 +129,7 @@ export const updateUserEmail = async (id, email) => {
         console.log(`id a atualizar ${id}`)
         const response = await api.put(`/users/${id}`, {
             email
-        }, { withCredentials: true })
+        })
         return {
             success: true
         };
@@ -147,7 +147,7 @@ export const updateUserPassword = async (id, currentPassword, newPassword) => {
         try {
             const response = await api.put(`/users/${id}`, {
                 newPassword
-            }, { withCredentials: true })
+            })
             localStorage.setItem('password', newPassword);
             return {
                 success: true
