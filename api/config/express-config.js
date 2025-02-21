@@ -4,6 +4,8 @@ const express = require("express");
 const app = express();
 
 // CORS configuration
+const cors = require("cors"); // Certifique-se de importar o CORS
+
 const allowedOrigins = [
   "http://localhost:3030",
   "http://localhost:5173",
