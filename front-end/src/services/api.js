@@ -146,9 +146,9 @@ export const updateUserEmail = async (id, email) => {
     }
 }
 
-export const updateUserPassword = async (email, currentPassword, newPassword) => {
+export const updateUserPassword = async (id, currentPassword, newPassword) => {
     try {
-        const verifyResponse = await api.post('/users/verify-password', { password: currentPassword, email });
+        const verifyResponse = await api.post('/users/verify-password', { password: currentPassword, id });
         
         if (verifyResponse.data.success) {
             const response = await api.put(`/users/${id}`, { newPassword });
