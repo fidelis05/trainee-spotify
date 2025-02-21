@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "http://trainee-spotify-api.vercel.app/api",
+    baseURL: "https://trainee-spotify-api.vercel.app/api",
     withCredentials: true,
 });
 
