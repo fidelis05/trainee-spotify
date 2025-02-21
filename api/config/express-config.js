@@ -13,7 +13,7 @@ app.use(
       "http://127.0.0.1:5173:3030",
       "http://127.0.0.1:5173",
       "http://localhost:3000",
-      "https://trainee-spotify.vercel.app",
+      "https://trainee-spotify-test.vercel.app",
     ],
     credentials: true,
   })
